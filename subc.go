@@ -58,7 +58,7 @@ func Sub(name string) (s *flag.FlagSet) {
 func Parse() (string, error) {
 	c, ok := subcommands[os.Args[1]]
 	if !ok {
-		return ErrSubcNotExist
+		return "", ErrSubcNotExist
 	}
 
 	return os.Args[1], c.Parse(os.Args[2:])
@@ -69,7 +69,7 @@ func Parse() (string, error) {
 func ParseArgs(args []string) (string, error) {
 	c, ok := subcommands[args[1]]
 	if !ok {
-		return ErrSubcNotExist
+		return "", ErrSubcNotExist
 	}
 
 	return args[1], c.Parse(args[2:])
