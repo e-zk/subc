@@ -18,7 +18,7 @@ func main() {
 	subc.Sub("remove").StringVar(&name, "n", "defaultname", "name of file to remove")
 	subc.Sub("remove").BoolVar(&force, "f", false, "force remove file")
 
-	err := subc.Parse()
+	subcommand, err := subc.Parse()
 	if err == subc.ErrSubcNotExist {
 		// show usage if an unknown subcommand is given
 		print("Unknown subcommand\n")
@@ -26,4 +26,6 @@ func main() {
 	} else if err != nil {
 		panic(err)
 	}
+
+	print(subcommand + "\n")
 }
