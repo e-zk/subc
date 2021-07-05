@@ -11,13 +11,15 @@ func main() {
 		someii int
 	)
 
-	subc.Subc("something").BoolVar(&someb, "q", true, "?")
-	subc.Subc("something").IntVar(&somei, "n", 1, "??")
-	subc.Subc("add").IntVar(&somei, "q", 15, "add: ?")
-	subc.Subc("add").IntVar(&someii, "n", 2, "add: ??")
+	subc.Sub("something").BoolVar(&someb, "q", true, "?")
+	subc.Sub("something").IntVar(&somei, "n", 1, "??")
+	subc.Sub("add").IntVar(&somei, "q", 15, "add: ?")
+	subc.Sub("add").IntVar(&someii, "n", 2, "add: ??")
 
 	err := subc.Parse()
-	if err != nil {
+	if err == subc.ErrSubcNotExist {
+		subc.Usage()
+	} else if err != nil {
 		panic(err)
 	}
 }
