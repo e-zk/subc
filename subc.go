@@ -6,11 +6,12 @@ import (
 	"os"
 )
 
-const (
+// errors
+var (
 	ErrSubcNotExist = errors.New("Subcommand does not exist")
 )
 
-var subcommands map[string]*flag.FlagSet = make(map[string]*flag.FlagSet)
+var subcommands = make(map[string]*flag.FlagSet)
 
 // add new/access existing subcommand
 func Subc(name string) (s *flag.FlagSet) {
