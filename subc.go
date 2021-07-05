@@ -8,7 +8,8 @@ import (
 	"os"
 )
 
-// ErrSubcNotExist is returned when a subcommand that does not exist is requested.
+// ErrSubcNotExist is returned when a subcommand that does not exist is
+// requested.
 var ErrSubcNotExist = errors.New("Subcommand does not exist")
 
 var (
@@ -35,7 +36,8 @@ func Output() io.Writer {
 	return outputWriter
 }
 
-// Sets destination for all subcommand usage and messages. By default this is os.Stderr.
+// Sets destination for all subcommand usage and messages. By default this is
+// os.Stderr.
 func SetOutput(output io.Writer) {
 	outputWriter = output
 }
