@@ -51,22 +51,24 @@ func Sub(name string) (s *flag.FlagSet) {
 	return subcommands[name]
 }
 
-// Parse the subcommand input (os.Args[1]) and arguments.
-func Parse() error {
+// Parse the subcommand input (os.Args[1]) and arguments. Returns the name of
+// the parsed subcommand and an error.
+func Parse() (string, error) {
 	c, ok := subcommands[os.Args[1]]
 	if !ok {
 		return ErrSubcNotExist
 	}
 
-	return c.Parse(os.Args[2:])
+	return os.Args[1], c.Parse(os.Args[2:])
 }
 
-// Parse the given subcommand input and arguments.
-func ParseArgs(args []string) error {
+// Parse the given subcommand input and arguments. Returns the name of the
+// parsed subcommand and an error.
+func ParseArgs(args []string) (string, error) {
 	c, ok := subcommands[args[1]]
 	if !ok {
 		return ErrSubcNotExist
 	}
 
-	return c.Parse(args[2:])
+	return args[1], c.Parse(args[2:])
 }

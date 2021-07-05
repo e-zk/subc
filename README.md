@@ -4,7 +4,12 @@ Wrapper for Go's `flag` that makes adding subcommands easy.
 
 ## usage
 
-Each subcommand is a FlagSet accessed via `subc.Sub("<name>")`.  
+Each subcommand is a FlagSet accessed via `subc.Sub("<name>")`.
+
+For example say there is a hypothetical program that has two subcommands:
+
+* `add` - write a number of random bytes (specified by `-b`) to a file (specified by `-n`) with an option to force overwrite (`-f`).
+* `remove` - remove the file specified by (`-n`) with an option to force remove (`-f`).
 
 ```go
 package main
