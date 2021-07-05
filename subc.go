@@ -6,25 +6,52 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"strings"
 )
 
 // ErrSubcNotExist is returned when a subcommand that does not exist is
 // requested.
 var ErrSubcNotExist = errors.New("Subcommand does not exist")
 
+// ErrNoSubc is returned when the given arguments do not have a subcommand.
+var ErrNoSubc = errors.New("Subcommand not given")
+
+// ErrUsage is returned when usage/help is requested.
+var ErrUsage = errors.New("Usage requested")
+
 var (
 	subcommands            = make(map[string]*flag.FlagSet)
 	outputWriter io.Writer = os.Stderr
 )
 
+func isHelp(subcommand string) bool {
+	switch subcommand {
+	case "help":
+		fallthrough
+	case "-h":
+		fallthrough
+	case "h":
+		return true
+	}
+	return false
+}
+
 // Prints a usage message documenting all defined subcommands and their flags.
 var Usage = func() {
-	fmt.Fprintf(outputWriter, "Usage of %s [", os.Args[0])
-	for name, _ := range subcommands {
-		fmt.Fprintf(outputWriter, "%s|", name)
+	// create an array of subcommand names
+	names := make([]string, len(subcommands))
+	i := 0
+	for name := range subcommands {
+		names[i] = name
+		i++
 	}
+
+	// print binary name, subcommand list
+	fmt.Fprintf(outputWriter, "Usage of %s [", os.Args[0])
+	fmt.Fprintf(outputWriter, "%s", strings.Join(names, "|"))
 	fmt.Fprintf(outputWriter, "]\n")
 
+	// for each subcommand print it's usage
 	for name, f := range subcommands {
 		fmt.Fprintf(outputWriter, "%s:\n", name)
 		f.PrintDefaults()
@@ -56,6 +83,11 @@ func Sub(name string) (s *flag.FlagSet) {
 // Parse the subcommand input (os.Args[1]) and arguments. Returns the name of
 // the parsed subcommand and an error.
 func Parse() (string, error) {
+	if isHelp(os.Args[1]) {
+		Usage()
+		return "", ErrUsage
+	}
+
 	c, ok := subcommands[os.Args[1]]
 	if !ok {
 		return "", ErrSubcNotExist
@@ -67,6 +99,10 @@ func Parse() (string, error) {
 // Parse the given subcommand input and arguments. Returns the name of the
 // parsed subcommand and an error.
 func ParseArgs(args []string) (string, error) {
+	if isHelp(args[1]) {
+		Usage()
+		return "", ErrUsage
+	}
 	c, ok := subcommands[args[1]]
 	if !ok {
 		return "", ErrSubcNotExist
