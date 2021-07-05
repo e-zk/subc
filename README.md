@@ -1,8 +1,4 @@
-# subc (WIP)
-
-[![GoDoc](https://godocs.io/github.com/e-zk/subc?status.svg)](https://godocs.io/github.com/e-zk/subc)
-
-------
+# subc (WIP) [![GoDoc](https://godocs.io/github.com/e-zk/subc?status.svg)](https://godocs.io/github.com/e-zk/subc)
 
 Wrapper for Go's `flag` that makes adding subcommands easy.
 
