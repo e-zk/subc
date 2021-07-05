@@ -23,6 +23,8 @@ func main() {
 		// show usage if an unknown subcommand is given
 		print("Unknown subcommand\n")
 		subc.Usage()
+	} else if err == subc.ErrUsage {
+		return
 	} else if err != nil {
 		panic(err)
 	}
