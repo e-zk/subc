@@ -13,7 +13,7 @@ import (
 // requested.
 var ErrSubcNotExist = errors.New("Subcommand does not exist")
 
-// ErrNoSubc is returned when the given arguments do not have a subcommand.
+// ErrNoSubc is returned when the given arguments do not contain a subcommand.
 var ErrNoSubc = errors.New("Subcommand not given")
 
 // ErrUsage is returned when usage/help is requested.
@@ -24,15 +24,20 @@ var (
 	outputWriter io.Writer = os.Stderr
 )
 
+// isHelp determines whether the given string is requesting the help/usage
+// message.
 func isHelp(subcommand string) bool {
 	switch subcommand {
 	case "help":
 		fallthrough
-	case "-h":
+	case "-help":
 		fallthrough
 	case "h":
+		fallthrough
+	case "-h":
 		return true
 	}
+
 	return false
 }
 
@@ -80,9 +85,14 @@ func Sub(name string) (s *flag.FlagSet) {
 	return subcommands[name]
 }
 
-// Parse the subcommand input (os.Args[1]) and arguments. Returns the name of
-// the parsed subcommand and an error.
+// Parse parses the flags for the subcommand os.Args[1]. Must be called after
+// all flags are defined and before flags are accessed by the program. Returns
+// the name of the requested subcommand.
 func Parse() (string, error) {
+	if !(len(os.Args) > 1) {
+		return "", ErrNoSubc
+	}
+
 	if isHelp(os.Args[1]) {
 		Usage()
 		return "", ErrUsage
@@ -96,17 +106,22 @@ func Parse() (string, error) {
 	return os.Args[1], c.Parse(os.Args[2:])
 }
 
-// Parse the given subcommand input and arguments. Returns the name of the
-// parsed subcommand and an error.
-func ParseArgs(args []string) (string, error) {
-	if isHelp(args[1]) {
+// Parse parses the the flags of the subcommand given as the first item in the
+// argument list. The given argument list should not include the command name.
+// Returns the name of the parsed subcommand.
+func ParseArgs(arguments []string) (string, error) {
+	if !(len(arguments) > 0) {
+		return "", ErrNoSubc
+	}
+
+	if isHelp(arguments[0]) {
 		Usage()
 		return "", ErrUsage
 	}
-	c, ok := subcommands[args[1]]
+	c, ok := subcommands[arguments[0]]
 	if !ok {
 		return "", ErrSubcNotExist
 	}
 
-	return args[1], c.Parse(args[2:])
+	return arguments[1], c.Parse(arguments[2:])
 }
