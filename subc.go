@@ -123,5 +123,5 @@ func ParseArgs(arguments []string) (string, error) {
 		return "", ErrSubcNotExist
 	}
 
-	return arguments[1], c.Parse(arguments[2:])
+	return arguments[0], c.Parse(arguments[1:])
 }
