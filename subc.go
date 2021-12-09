@@ -52,9 +52,7 @@ var Usage = func() {
 	}
 
 	// print binary name, subcommand list
-	fmt.Fprintf(outputWriter, "Usage of %s [", os.Args[0])
-	fmt.Fprintf(outputWriter, "%s", strings.Join(names, "|"))
-	fmt.Fprintf(outputWriter, "]\n")
+	fmt.Fprintf(outputWriter, "Usage of %s [%s]\n", os.Args[0], strings.Join(names, "|"))
 
 	// for each subcommand print it's usage
 	for name, f := range subcommands {
