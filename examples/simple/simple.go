@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/e-zk/subc"
+	"go.zakaria.org/subc"
 )
 
 func main() {
